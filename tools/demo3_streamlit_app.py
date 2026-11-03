@@ -21,6 +21,16 @@ TOOLS_DIR = Path(__file__).resolve().parent
 if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
+
+def is_running_on_cloud() -> bool:
+    """Streamlit Community Cloud 等のクラウド環境で実行中かどうかを判定"""
+    return (
+        Path("/mount/src").exists()
+        or Path("/home/adminuser").exists()
+        or os.environ.get("STREAMLIT_SHARING_MODE") is not None
+    )
+
+
 from convert_kiyaku_3col import convert_4col_to_3col
 from convert_html_to_docx import convert_html_to_docx
 from docx_to_json import convert_docx_to_json
@@ -41,28 +51,30 @@ page = st.sidebar.radio(
     ]
 )
 
-st.sidebar.divider()
-if st.sidebar.button("🛑 アプリを終了する", use_container_width=True):
-    # Streamlitの「Connection error」ダイアログが出ないよう、画面全体を終了メッセージに書き換えてから停止
-    components.html(
-        """
-        <script>
-        try {
-            window.parent.document.title = "終了しました";
-            window.parent.document.body.innerHTML = `
-                <div style="font-family:'Yu Gothic UI',sans-serif; text-align:center; margin-top:15vh; color:#334155;">
-                    <h2 style="font-size:1.6rem;">✅ アプリケーションを正常に終了しました</h2>
-                    <p style="color:#64748b;">バックグラウンドのPythonサーバーは停止しました。このブラウザのタブを閉じてください。</p>
-                </div>
-            `;
-            window.parent.close();
-        } catch (e) {}
-        </script>
-        """,
-        height=0,
-    )
-    threading.Timer(0.8, lambda: os._exit(0)).start()
-    st.stop()
+# ローカル実行時のみ「アプリを終了する」ボタンを表示（クラウド上では非表示）
+if not is_running_on_cloud():
+    st.sidebar.divider()
+    if st.sidebar.button("🛑 アプリを終了する", use_container_width=True):
+        # Streamlitの「Connection error」ダイアログが出ないよう、画面全体を終了メッセージに書き換えてから停止
+        components.html(
+            """
+            <script>
+            try {
+                window.parent.document.title = "終了しました";
+                window.parent.document.body.innerHTML = `
+                    <div style="font-family:'Yu Gothic UI',sans-serif; text-align:center; margin-top:15vh; color:#334155;">
+                        <h2 style="font-size:1.6rem;">✅ アプリケーションを正常に終了しました</h2>
+                        <p style="color:#64748b;">バックグラウンドのPythonサーバーは停止しました。このブラウザのタブを閉じてください。</p>
+                    </div>
+                `;
+                window.parent.close();
+            } catch (e) {}
+            </script>
+            """,
+            height=0,
+        )
+        threading.Timer(0.8, lambda: os._exit(0)).start()
+        st.stop()
 
 if page == "🏠 トップ (ツール一覧)":
     st.title("管理組合 規約変換ツール ポータル (Streamlit版)")
