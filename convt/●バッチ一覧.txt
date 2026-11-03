@@ -1,0 +1,9 @@
+●3列のHTMLをdocxに変換
+E:\webdoc\kanrikumiai\Release\convert_html_to_docx.py
+
+●4列のHTMLを3列のHTMLに変換
+C:\xampp\htdocs\改訂履歴\3col\convert_kiyaku_3col.py
+
+●docxをJSONに変換
+E:\webapp\javascript\管理組合\convt\docx_to_json.py
+

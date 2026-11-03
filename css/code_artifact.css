@@ -1,0 +1,345 @@
+/* 全体ベース設定: フォントサイズ 16px */
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+body {
+    font-size: 16px;
+    background-color: #f8fafc;
+    color: #1e293b;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    min-height: 100vh;
+}
+
+/* アンカーオフセット調整 */
+.anchor-target {
+    scroll-margin-top: 5rem;
+}
+
+/* ヘッダー */
+.app-header {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e2e8f0;
+    height: 4rem;
+}
+.app-logo-icon {
+    background-color: #4f46e5;
+    color: #ffffff;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.app-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0;
+}
+.app-subtitle {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0;
+}
+
+/* サイドバー目次 */
+.toc-sidebar-wrapper {
+    position: sticky;
+    top: 5rem;
+    height: calc(100vh - 6rem);
+}
+.toc-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.toc-header-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #64748b;
+}
+.toc-badge {
+    background-color: #eef2ff;
+    color: #4f46e5;
+    font-weight: 600;
+}
+.toc-list {
+    overflow-y: auto;
+    flex: 1;
+    font-size: 16px;
+}
+.toc-chapter-link {
+    display: block;
+    font-weight: 700;
+    color: #1e293b;
+    text-decoration: none;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.375rem;
+}
+.toc-chapter-link:hover {
+    color: #4f46e5;
+    background-color: #f8fafc;
+}
+.toc-article-link {
+    display: block;
+    color: #475569;
+    text-decoration: none;
+    padding: 0.25rem 0.5rem 0.25rem 1.25rem;
+    border-radius: 0.375rem;
+}
+.toc-article-link:hover {
+    color: #4f46e5;
+    background-color: #eef2ff;
+}
+.toc-article-num {
+    font-weight: 600;
+    color: #334155;
+    margin-right: 0.25rem;
+}
+
+/* 規約タイトルカード */
+.bylaws-hero-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.bylaws-hero-bg-icon {
+    position: absolute;
+    right: -1.5rem;
+    bottom: -1.5rem;
+    font-size: 8rem;
+    color: #f1f5f9;
+    pointer-events: none;
+    user-select: none;
+}
+.bylaws-badge {
+    background-color: #eef2ff;
+    color: #4338ca;
+    border: 1px solid #e0e7ff;
+    font-weight: 600;
+}
+.bylaws-main-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+.bylaws-stats {
+    color: #64748b;
+    font-size: 16px;
+}
+
+/* [章] Chapter スタイル */
+.chapter-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+.chapter-header {
+    background: linear-gradient(90deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    color: #ffffff;
+    border-bottom: 1px solid rgba(49, 46, 129, 0.5);
+}
+.chapter-num-badge {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #c7d2fe;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 1rem;
+    font-weight: 700;
+}
+.chapter-title-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0;
+}
+
+/* [節] Section スタイル */
+.section-header {
+    border-bottom: 2px solid #e0e7ff;
+}
+.section-num-badge {
+    background-color: #eef2ff;
+    color: #000000;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.section-title-text {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0;
+}
+
+/* [条] Article スタイル */
+.article-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 16px;
+    transition: box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.article-box:hover {
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+.article-header {
+    border-bottom: 1px solid #e2e8f0;
+}
+.article-num-badge {
+    background-color: #1e293b;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.article-num-text {
+    font-weight: 700;
+    color: #1e293b;
+}
+.article-title-text {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 1.05rem;
+}
+
+/* [項] Paragraph スタイル */
+.paragraphs-list {
+    font-size: 16px;
+    color: #1e293b;
+    line-height: 1.75;
+}
+.paragraph-item {
+    font-size: 16px;
+}
+.paragraph-no-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    color: #334155;
+    font-size: 0.95rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+.paragraph-text {
+    font-size: 16px;
+    color: #1e293b;
+    line-height: 1.75;
+    text-align: justify;
+    margin-bottom: 0;
+}
+
+/* [号] Item スタイル */
+.item-block {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 16px;
+}
+.item-no-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.75rem;
+    padding: 0.1rem 0.45rem;
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    border-radius: 0.375rem;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+.item-term-badge {
+    font-weight: 700;
+    color: #1e1b4b;
+    background-color: #eef2ff;
+    border: 1px solid #e0e7ff;
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+    display: inline-block;
+    margin-right: 0.35rem;
+}
+.item-body-text {
+    font-size: 16px;
+    color: #334155;
+    line-height: 1.75;
+}
+
+/* [細分] Sub-item / Detail スタイル */
+.sub-items-list {
+    border-left: 2px solid #e0e7ff;
+    font-size: 16px;
+}
+.sub-item-block {
+    font-size: 16px;
+}
+.sub-item-no {
+    font-weight: 700;
+    color: #000000;
+    flex-shrink: 0;
+}
+.sub-item-text {
+    color: #334155;
+    line-height: 1.7;
+}
+.details-list {
+    border-left: 1px solid #cbd5e1;
+    font-size: 16px;
+}
+.detail-item {
+    font-size: 16px;
+    color: #475569;
+    line-height: 1.65;
+}
+.detail-no {
+    font-weight: 600;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+/* リンクコピーボタン */
+.copy-anchor-btn {
+    color: #94a3b8;
+    background: transparent;
+    border: none;
+    padding: 0.25rem 0.4rem;
+    border-radius: 0.375rem;
+    transition: color 0.15s ease, background-color 0.15s ease;
+    text-decoration: none;
+}
+.copy-anchor-btn:hover {
+    color: #4f46e5;
+    background-color: #eef2ff;
+}
+.chapter-header .copy-anchor-btn {
+    color: rgba(255, 255, 255, 0.65);
+}
+.chapter-header .copy-anchor-btn:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* カスタムスクロールバー */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

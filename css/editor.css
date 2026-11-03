@@ -1,0 +1,346 @@
+/* =============================================================
+   管理規約JSON 編集ツール (editor.css)
+   code_artifact.css のデザイントーンを継承しつつ編集UIを最適化
+   ============================================================= */
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 15px;
+    background-color: #f1f5f9;
+    color: #1e293b;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー */
+.editor-header {
+    background-color: #0f172a;
+    color: #ffffff;
+    height: 3.75rem;
+    flex-shrink: 0;
+    border-bottom: 1px solid #1e293b;
+    z-index: 1030;
+}
+
+.app-logo-icon {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #ffffff;
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
+/* 3カラム メインワークスペース */
+.editor-workspace {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* 左ペイン：構造ツリー目次 */
+.editor-sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    background-color: #ffffff;
+    border-right: 1px solid #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar-tree-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem;
+}
+
+.tree-chapter-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    background-color: #f8fafc;
+    overflow: hidden;
+}
+
+.tree-chapter-header {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 0.45rem 0.65rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+}
+
+.tree-chapter-header.active {
+    background-color: #4f46e5;
+}
+
+.tree-section-header {
+    background-color: #e0e7ff;
+    color: #1e1b4b;
+    padding: 0.35rem 0.65rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #c7d2fe;
+}
+
+.tree-section-header.active {
+    background-color: #c7d2fe;
+}
+
+.tree-article-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.875rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    background-color: #ffffff;
+    transition: background-color 0.12s ease;
+}
+
+.tree-article-item:last-child {
+    border-bottom: none;
+}
+
+.tree-article-item:hover {
+    background-color: #f1f5f9;
+}
+
+.tree-article-item.active {
+    background-color: #eef2ff;
+    color: #4338ca;
+    font-weight: 700;
+    border-left: 4px solid #4f46e5;
+}
+
+.tree-article-item.modified .modified-dot {
+    display: inline-block;
+}
+
+.modified-dot {
+    display: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #f59e0b;
+    flex-shrink: 0;
+}
+
+/* 中央ペイン：フォームエディタ */
+.editor-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem 4rem 1.5rem;
+    min-width: 0;
+}
+
+/* 右ペイン：リアルタイムプレビュー＆新旧対照表 */
+.editor-preview-pane {
+    width: 440px;
+    flex-shrink: 0;
+    background-color: #ffffff;
+    border-left: 1px solid #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: width 0.2s ease;
+}
+
+.editor-preview-pane.expanded {
+    width: 55%;
+}
+
+.editor-preview-pane.collapsed {
+    width: 0;
+    border-left: none;
+    overflow: hidden;
+}
+
+.preview-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #f8fafc;
+}
+
+/* 編集カード群の階層別デザイン */
+.edit-section-card {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+/* 項 (Paragraph) カード */
+.para-edit-card {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-left: 4px solid #3b82f6;
+    border-radius: 0.65rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+/* 号 (Item) カード */
+.item-edit-card {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-left: 4px solid #10b981;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-top: 0.6rem;
+}
+
+/* 細目1 (SubItem: イ、ロ、ハ / ①、②) カード */
+.subitem-edit-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #f59e0b;
+    border-radius: 0.45rem;
+    padding: 0.65rem;
+    margin-top: 0.5rem;
+}
+
+/* 細目2 (Detail: （１）（２）) カード */
+.detail-edit-card {
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-left: 3px solid #8b5cf6;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    margin-top: 0.4rem;
+}
+
+/* バッジ類 */
+.level-badge-para {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.375rem;
+}
+
+.level-badge-item {
+    background-color: #d1fae5;
+    color: #047857;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.level-badge-subitem {
+    background-color: #fef3c7;
+    color: #b45309;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.35rem;
+}
+
+.level-badge-detail {
+    background-color: #ede9fe;
+    color: #6d28d9;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.35rem;
+}
+
+/* テキストエリア自動調整・視認性 */
+textarea.auto-resize {
+    resize: vertical;
+    min-height: 2.6rem;
+    line-height: 1.65;
+    font-size: 0.95rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.18);
+}
+
+/* 新旧対照表テーブル */
+.diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background-color: #ffffff;
+}
+
+.diff-table th {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #334155;
+    width: 50%;
+}
+
+.diff-table td {
+    padding: 0.75rem;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.diff-added {
+    background-color: #dcfce7;
+    color: #166534;
+    font-weight: 700;
+    text-decoration: underline;
+    padding: 0.05rem 0.15rem;
+    border-radius: 0.2rem;
+}
+
+.diff-removed {
+    background-color: #fee2e2;
+    color: #991b1b;
+    text-decoration: line-through;
+    padding: 0.05rem 0.15rem;
+    border-radius: 0.2rem;
+}
+
+/* 印刷時は新旧対照表のみ綺麗に印刷可能にする */
+@media print {
+    body {
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+    .editor-header,
+    .editor-sidebar,
+    .editor-main,
+    .preview-toolbar {
+        display: none !important;
+    }
+    .editor-preview-pane {
+        width: 100% !important;
+        border: none !important;
+        height: auto !important;
+    }
+    .preview-body {
+        overflow: visible !important;
+        padding: 0 !important;
+        background: #fff !important;
+    }
+}

@@ -1,0 +1,7 @@
+# ディレクトリへ移動
+cd E:\webapp\javascript\管理組合\convt
+
+# 変換実行
+python ./convt/docx_to_json.py 1ブロック規約（2013年）.docx 1ブロック規約（2013年）.json
+
+python docx_to_json.py マンション標準管理規約（団地型）.docx マンション標準管理規約（団地型）.json

@@ -1,0 +1,5 @@
+# 変換プログラムへ移動
+cd c:\xampp\htdocs\kanrikumiai\Release
+
+# 変換データはプログラムからの相対位置で指定する
+python convert_html_to_docx.py -i kiyaku-taihi-3col.html -o 規約改正案.docx

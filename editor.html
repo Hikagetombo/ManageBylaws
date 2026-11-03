@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理規約JSON 保守・編集ツール</title>
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery 3.7.1 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- 閲覧ビューア共通スタイル & エディタ専用スタイル -->
+  <link rel="stylesheet" href="./css/code_artifact.css">
+  <link rel="stylesheet" href="./css/editor.css">
+</head>
+<body>
+
+  <!-- トップヘッダーバー -->
+  <header class="editor-header px-3 d-flex align-items-center justify-content-between gap-2">
+    <div class="d-flex align-items-center gap-2 min-w-0">
+      <div class="app-logo-icon rounded-3 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0">
+        <i class="ph ph-note-pencil fs-5"></i>
+      </div>
+      <div class="d-flex align-items-center gap-2 text-truncate">
+        <span class="fw-bold fs-6 text-white">管理規約JSON 編集ツール</span>
+        <span id="current-file-badge" class="badge bg-secondary font-monospace">管理組合規約.json</span>
+        <span id="unsaved-badge" class="badge bg-warning text-dark d-none">変更あり</span>
+      </div>
+    </div>
+
+    <!-- 中央：規約全体タイトル入力 -->
+    <div class="d-none d-xl-flex align-items-center gap-2 flex-grow-1 justify-content-center" style="max-width: 420px;">
+      <span class="small text-light text-opacity-75 text-nowrap">規約名称:</span>
+      <input type="text" id="bylaws-title-input" class="form-control form-control-sm bg-dark text-white border-secondary"
+             placeholder="例：グランピア西白井（１ブロック）団地管理組合規約">
+    </div>
+
+    <!-- 右側：操作ツールバー -->
+    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+      <!-- 元に戻す / やり直す -->
+      <div class="btn-group btn-group-sm" role="group" aria-label="履歴操作">
+        <button type="button" class="btn btn-outline-light" id="btn-undo" disabled title="元に戻す (Ctrl+Z)">
+          <i class="ph ph-arrow-u-up-left"></i> 元に戻す
+        </button>
+        <button type="button" class="btn btn-outline-light" id="btn-redo" disabled title="やり直す (Ctrl+Y)">
+          <i class="ph ph-arrow-u-up-right"></i>
+        </button>
+      </div>
+
+      <!-- 条番号一括連番ボタン -->
+      <button type="button" class="btn btn-outline-info btn-sm d-none d-md-inline-flex align-items-center gap-1"
+              id="btn-renumber-all-articles" title="第1条から最終条まで条番号とIDを自動で連番振り直し">
+        <i class="ph ph-list-numbers"></i>
+        <span>条番号を連番更新</span>
+      </button>
+
+      <!-- ./convt 内のプリセット読込ドロップダウン -->
+      <div class="dropdown">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle d-inline-flex align-items-center gap-1"
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="ph ph-folder-open"></i>
+          <span>convt内JSON切替</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow">
+          <li><h6 class="dropdown-header">./convt フォルダ内の規約</h6></li>
+          <li>
+            <a class="dropdown-item preset-load-item" href="#"
+               data-path="./convt/管理組合規約.json" data-name="管理組合規約.json">
+              <i class="ph ph-file-text me-1 text-primary"></i> 管理組合規約.json
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item preset-load-item" href="#"
+               data-path="./convt/1ブロック規約（2013年）.json" data-name="1ブロック規約（2013年）.json">
+              <i class="ph ph-file-text me-1 text-success"></i> 1ブロック規約（2013年）.json
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item preset-load-item" href="#"
+               data-path="./convt/マンション標準管理規約（団地型）.json" data-name="マンション標準管理規約（団地型）.json">
+              <i class="ph ph-file-text me-1 text-warning"></i> マンション標準管理規約（団地型）.json
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- PC内の任意のJSONファイル読込 -->
+      <label class="btn btn-outline-light btn-sm d-inline-flex align-items-center gap-1 mb-0" title="パソコン内のJSONファイルを読み込む">
+        <i class="ph ph-upload-simple"></i>
+        <span>ファイル読込</span>
+        <input type="file" id="file-input-json" accept=".json" class="d-none">
+      </label>
+
+      <!-- JSON保存（ダウンロード） -->
+      <button type="button" class="btn btn-primary btn-sm fw-bold d-inline-flex align-items-center gap-1 shadow-sm" id="btn-download-json">
+        <i class="ph ph-download-simple"></i>
+        <span>JSONを保存</span>
+      </button>
+
+      <!-- 使い方ガイド -->
+      <button type="button" class="btn btn-outline-secondary btn-sm text-light" data-bs-toggle="modal" data-bs-target="#helpModal" title="使い方ガイド">
+        <i class="ph ph-question fs-5"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- メイン3ペイン・ワークスペース -->
+  <div class="editor-workspace">
+
+    <!-- 【左ペイン】章・節・条のツリー目次 & 検索 -->
+    <aside class="editor-sidebar">
+      <div class="p-2 border-bottom bg-light">
+        <div class="d-flex align-items-center justify-content-between mb-1 px-1">
+          <span class="small fw-bold text-secondary">
+            <i class="ph ph-tree-structure me-1"></i>章・節・条の一覧
+          </span>
+          <span id="tree-stats-badge" class="badge bg-secondary bg-opacity-10 text-secondary">全 0 条</span>
+        </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-white"><i class="ph ph-magnifying-glass text-muted"></i></span>
+          <input type="text" id="tree-search-input" class="form-control" placeholder="条番号・見出し・語句で検索...">
+          <button class="btn btn-outline-secondary" type="button" id="btn-clear-search" title="クリア">
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ツリーリスト本体 -->
+      <div id="sidebar-tree" class="sidebar-tree-list">
+        <!-- JSで動的生成 -->
+      </div>
+    </aside>
+
+    <!-- 【中央ペイン】選択中の条文フォームエディタ -->
+    <main class="editor-main">
+      <div id="editor-main-content">
+        <!-- JSで動的生成 -->
+      </div>
+    </main>
+
+    <!-- 【右ペイン】リアルタイムプレビュー / 新旧対照表 / JSON確認 -->
+    <aside id="preview-pane" class="editor-preview-pane">
+      <div class="preview-toolbar p-2 border-bottom bg-light d-flex align-items-center justify-content-between gap-1">
+        <div class="nav nav-pills nav-fill flex-grow-1 gap-1" style="font-size: 0.82rem;">
+          <button type="button" class="nav-link py-1 px-2 active preview-tab-btn" data-tab="preview">
+            <i class="ph ph-eye me-1"></i>表示プレビュー
+          </button>
+          <button type="button" class="nav-link py-1 px-2 preview-tab-btn" data-tab="diff">
+            <i class="ph ph-git-diff me-1"></i>新旧対照表
+          </button>
+          <button type="button" class="nav-link py-1 px-2 preview-tab-btn" data-tab="json">
+            <i class="ph ph-code me-1"></i>JSON確認
+          </button>
+        </div>
+        <button type="button" class="btn btn-outline-secondary btn-sm py-0 px-2" id="btn-expand-preview" title="プレビュー枠を広げる / 戻す">
+          <i class="ph ph-arrows-out-line-horizontal"></i>
+        </button>
+      </div>
+
+      <div id="preview-pane-body" class="preview-body">
+        <!-- JSで動的生成 -->
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- 使い方ガイドモーダル（後任役員・委員向け） -->
+  <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title fw-bold" id="helpModalLabel">
+            <i class="ph ph-book-open-text me-2"></i>後任役員・委員向け かんたん操作ガイド
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body lh-lg">
+          <div class="alert alert-primary small">
+            <strong>このツールの目的：</strong>
+            JSONファイルの記号（<code>{ }</code> や <code>[ ]</code>、カンマなど）に一切触れることなく、安全に管理規約の条文を追加・変更・削除できる専用エディタです。
+          </div>
+
+          <h6 class="fw-bold border-bottom pb-1 mt-3">1. 基本の流れ（3ステップ）</h6>
+          <ol class="small">
+            <li><strong>読み込む：</strong> 画面右上の「convt内JSON切替」または「ファイル読込」から、編集したい規約JSONを読み込みます（起動時は <code>./convt/管理組合規約.json</code> が自動で読み込まれます）。</li>
+            <li><strong>編集する：</strong> 左側の一覧から編集したい「第○条」をクリックし、中央の入力欄で文章を書き換えます。</li>
+            <li><strong>保存する：</strong> 右上の青い<strong>「JSONを保存」</strong>ボタンを押すと、正しいJSON形式でダウンロードされます。これを <code>convt</code> フォルダ内の元ファイルと差し替えるだけで完了です。</li>
+          </ol>
+
+          <h6 class="fw-bold border-bottom pb-1 mt-3">2. よくある法改正・規約改定時の操作</h6>
+          <ul class="small">
+            <li><strong>条文の途中に新しい条を追加したい（枝番にする場合）：</strong><br>
+              例：第19条の次に「第19条の２」を作りたい場合は、第19条を開いて上部の<strong>「＋枝番（の２）を追加」</strong>ボタンを押します。以降の条番号をずらさずに追加できます。</li>
+            <li><strong>条文を追加・削除して、全体の条番号を振り直したい場合：</strong><br>
+              上部の<strong>「＋次へ条を追加」</strong>や<strong>「この条を削除」</strong>を行ったあと、画面最上部の<strong>「条番号を連番更新」</strong>ボタンを押すと、第1条から最終条まで正しい全角・半角ルールと内部ID（<code>art_0001</code>等）が自動で振り直されます。</li>
+            <li><strong>第2条（定義）に新しい用語を追加したい場合：</strong><br>
+              「＋号（一、二…）を追加」を押すと、自動的に「用語（<code>term</code>）」と「定義文（<code>definition</code>）」が分かれた入力欄になります。</li>
+            <li><strong>総会議案書用の「新旧対照表」を作りたい場合：</strong><br>
+              画面右側の<strong>「新旧対照表」</strong>タブを開くと、変更前と変更後の条文が自動で比較・赤字＆緑下線ハイライト表示されます。「対照表を印刷」ボタンからそのまま印刷やPDF保存が可能です。</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <a href="./code_artifact.html" target="_blank" class="btn btn-outline-primary btn-sm me-auto">
+            <i class="ph ph-arrow-square-out me-1"></i>閲覧用ビューア (code_artifact.html) を別タブで開く
+          </a>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">閉じる</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 通知トースト -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="editorToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2">
+          <i class="ph ph-check-circle text-success fs-5"></i>
+          <span id="toast-text">完了しました</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- エディタメインスクリプト -->
+  <script src="./js/editor.js"></script>
+</body>
+</html>

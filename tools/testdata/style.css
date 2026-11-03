@@ -1,0 +1,174 @@
+html body {
+    font-family:
+        "Meiryo", 游ゴシック, "Yu Mincho", "游明朝体", メイリオ, "Meiryo UI",
+        "Segoe UI", sans-serif;
+    /*font-family: 'Yu Mincho Light','YuMincho','Yu Mincho','游明朝体','ＭＳ 明朝', 'MS Mincho',sans-serif;*/
+    margin: 3px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 5px !important;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+table {
+    line-height: 1.75 !important;
+    /*line-height: 2 !important;*/
+    /*font-size:16px;*/
+    font-size: 12px;
+}
+td {
+    padding-top:    5px !important;
+    padding-bottom: 5px !important;
+}
+span[id^="sa"],
+span[id^="ga"],
+span[id^="na"] {
+    font-weight: bold !important;
+}
+
+span[id^="sc"],
+span[id^="bc"],
+span[id^="nc"] {
+    font-weight: bold !important;
+}
+
+span[id^="fs"] {
+    font-weight: bold !important;
+}
+
+span[id^="sph"] {
+    font-weight: bold !important;
+}
+
+span[id^="gph"] {
+    font-weight: bold !important;
+}
+
+/*折り返し行のインデント*/
+div.noind {
+    text-indent: -1em;
+    padding-left: 1em;
+}
+
+.tred {
+    color: red;
+}
+
+.bgray {
+    background-color: #ccc !important;
+}
+
+.bgreen {
+    background-color: #e2efda !important;
+}
+
+.bblue {
+    background-color: #ddebf7 !important;
+}
+
+.borange {
+    background-color: #fff2cc !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+/*
+td{
+  text-indent: -1em;
+  padding-left: 1em;
+}
+*/
+ul {
+    list-style: none !important;
+}
+
+.box {
+    border: 2px solid #0eae09;
+    padding: 20px;
+}
+
+td.item {
+    border-bottom: 2px dotted #ccc !important;
+    /*border-top: 2px dotted #ccc !important;*/
+}
+
+td.item.exp {
+    border-bottom: 1px solid #000 !important;
+}
+
+/* Fixed navbar adjustment */
+html body {
+    padding-top: 70px;
+}
+
+/* Navbar dropdown hover effect */
+@media all and (min-width: 992px) {
+    .navbar .nav-item.dropdown:hover .dropdown-menu {
+        font-size: 12px;
+        display: block !important;
+        margin-top: 0;
+        opacity: 1;
+        visibility: visible;
+        z-index: 2000;
+    }
+}
+
+/* Navigation and Dropdown link colors - keeping default link color (blue) but removing underline */
+.navbar-nav .nav-link,
+.dropdown-menu .dropdown-item {
+    color: #0d6efd !important;
+    text-decoration: none;
+}
+
+.navbar-nav .nav-link:hover,
+.dropdown-menu .dropdown-item:hover {
+    color: #0a58ca !important;
+}
+
+.note {
+  font-size: 12px !important;
+}
+/* 章、節インデント */
+.sho, .phs{
+  text-align: center!important;
+}
+/* タイトル */
+.ttl{
+  padding-left:0em;
+}
+/* 条 */
+.jou{
+  text-indent: -2em;
+  padding-left: 2em;
+  display: block;
+}
+/* 項 */
+.kou{
+  padding-left: 2em;
+  text-indent: -1em;
+}
+
+/* 号 */
+.gou{
+  padding-left: 4em;
+  text-indent: -2em;
+}
+/* 号の細目 */
+.sai{
+text-indent: -2em;
+padding-left: 5em;
+}
+/* 号の細目の細目 */
+.sais{
+text-indent: -2em;
+padding-left: 5em;
+}

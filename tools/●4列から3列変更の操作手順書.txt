@@ -1,0 +1,15 @@
+主なオプション
+
+● テーブル部分のみ出力したい場合（外枠HTMLを含めない）:
+
+powershell
+
+python convert_kiyaku_3col.py -t
+
+
+● 別名や別パスで保存したい場合:
+
+powershell
+
+python convert_kiyaku_3col.py kiyaku/kiyaku-taihi-4col.html -o kiyaku/output.html
+

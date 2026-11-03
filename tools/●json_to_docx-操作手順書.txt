@@ -1,0 +1,8 @@
+# CLIでの変換実行（位置引数または -i / -o オプションの両方に対応）
+python ./tools/json_to_docx.py 管理組合規約.json 改正規約.docx
+
+# オプション指定の場合
+python ./tools/json_to_docx.py -i 管理組合規約.json -o 改正規約.docx
+
+# 出力ファイル名を省略した場合は「入力ファイル名.docx」が生成されます
+python ./tools/json_to_docx.py 1ブロック規約（2013年）.json

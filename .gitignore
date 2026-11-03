@@ -1,0 +1,6 @@
+.ipynb_checkpoints
+*.ipynb
+URL.txt
+fetch.html
+getjson.html
+getJSON-func.html
